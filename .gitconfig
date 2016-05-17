@@ -1,0 +1,7 @@
+[user]
+	name = matt
+	email = mattythebatty@gmail.com
+[core]
+	excludesfile = ~/.gitignore
+[push]
+	default = simple
