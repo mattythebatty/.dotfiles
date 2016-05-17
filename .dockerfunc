@@ -1,0 +1,95 @@
+#!/bin/bash
+
+export DOCKER_REPO_PREFIX=jess
+
+#
+# Helper Functions
+#
+dcleanup(){
+	docker rm $(docker ps -aq 2>/dev/null) 2>/dev/null
+	docker rm -v $(docker ps --filter status=exited -q 2>/dev/null) 2>/dev/null
+	docker rmi $(docker images --filter dangling=true -q 2>/dev/null) 2>/dev/null
+}
+del_stopped(){
+	local name=$1
+	local state=$(docker inspect --format "{{.State.Running}}" $name 2>/dev/null)
+
+	if [[ "$state" == "false" ]]; then
+		docker rm $name
+	fi
+}
+relies_on(){
+	local containers=$@
+
+	for container in $containers; do
+		local state=$(docker inspect --format "{{.State.Running}}" $container 2>/dev/null)
+
+		if [[ "$state" == "false" ]] || [[ "$state" == "" ]]; then
+			echo "$container is not running, starting it for you."
+			$container
+		fi
+	done
+}
+
+spotify(){
+	del_stopped spotify
+
+	docker run -d \
+		-v /etc/localtime:/etc/localtime:ro \
+		-v /tmp/.X11-unix:/tmp/.X11-unix \
+		-e DISPLAY=unix$DISPLAY \
+		-e QT_DEVICE_PIXEL_RATIO \
+		--security-opt seccomp:unconfined \
+		--device /dev/snd \
+		--device /dev/dri \
+		--group-add audio \
+		--group-add video \
+		--name spotify \
+		${DOCKER_REPO_PREFIX}/spotify
+}
+steam(){
+	del_stopped steam
+	relies_on pulseaudio
+
+	docker run -d \
+		-v /etc/localtime:/etc/localtime:ro \
+		-v /etc/machine-id:/etc/machine-id:ro \
+		-v /var/run/dbus:/var/run/dbus \
+		-v /tmp/.X11-unix:/tmp/.X11-unix \
+		-v $HOME/.steam:/home/steam \
+		-e DISPLAY=unix$DISPLAY \
+		--link pulseaudio:pulseaudio \
+		-e PULSE_SERVER=pulseaudio \
+		--device /dev/dri \
+		--name steam \
+		${DOCKER_REPO_PREFIX}/steam
+}
+
+
+###
+### Awesome sauce by @jpetazzo
+###
+command_not_found_handle () {
+	# Check if there is a container image with that name
+	if ! docker inspect --format '{{ .Author }}' "$1" >&/dev/null ; then
+		echo "$0: $1: command not found"
+		return
+	fi
+
+	# Check that it's really the name of the image, not a prefix
+	if docker inspect --format '{{ .Id }}' "$1" | grep -q "^$1" ; then
+		echo "$0: $1: command not found"
+		return
+	fi
+
+	docker run -ti -u $(whoami) -w "$HOME" \
+		$(env | cut -d= -f1 | awk '{print "-e", $1}') \
+		--device /dev/snd \
+		-v /etc/passwd:/etc/passwd:ro \
+		-v /etc/group:/etc/group:ro \
+		-v /etc/localtime:/etc/localtime:ro \
+		-v /home:/home \
+		-v /tmp/.X11-unix:/tmp/.X11-unix \
+		"${DOCKER_REPO_PREFIX}/$@"
+}
+
