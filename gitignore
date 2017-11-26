@@ -2,6 +2,7 @@
 .idea
 .DS_STORE
 *.sw?
+.vscode
 
 .Spotlight-V100
 .Trashes
