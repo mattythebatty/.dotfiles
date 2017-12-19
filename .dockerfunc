@@ -187,6 +187,25 @@ chrome(){
 		--host-resolver-rules="$map" "$args"
 
 }
+
+composer(){
+	del_stopped composer
+	
+	tty=
+	tty -s && tty=--tty
+	docker run \
+		$tty \
+		--rm \
+		--interactive \
+		--volume $PWD:/app \
+		--volume $SSH_AUTH_SOCK:/ssh-auth.sock \
+		--volume /etc/passwd:/etc/passwd:ro \
+		--volume /etc/group:/etc/group:ro \
+		--user $(id -u):$(id -g) \
+		--env SSH_AUTH_SOCK=/ssh-auth.sock \
+		composer "$@"
+}
+
 consul(){
 	del_stopped consul
 
@@ -592,6 +611,33 @@ pandoc(){
 		--name pandoc \
 		${DOCKER_REPO_PREFIX}/pandoc "${args}" "${rfile}"
 }
+
+phpunit(){
+	local version
+	while getopts ":v:" opt; do
+  	case $opt in
+ 	v)
+		version=$OPTARG
+      		;;
+    	\?)
+		echo "Invalid option: $version" >&2
+		exit 1
+		;;
+	:)
+		version="latest"
+		;;
+	esac
+	done
+
+	echo "$@";
+
+	docker run \
+		-v $(pwd):/app \
+		 --rm \
+		--user $(id -u):$(id -g) \
+		phpunit/phpunit:"$version" "$@"
+}
+
 pivman(){
 	del_stopped pivman
 
