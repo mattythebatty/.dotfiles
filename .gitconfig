@@ -4,3 +4,6 @@
 	excludesfile = ~/.gitignore
 [push]
 	default = simple
+[alias]
+    find = log --pretty=\"format:%Cgreen%H %Cblue%s\" --name-status --grep
+
