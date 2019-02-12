@@ -4,6 +4,12 @@
 *.sw?
 .vscode
 
+.phpunit-watcher.yml
+
+.phpstorm.meta.php
+
+graphql.*.json
+
 .Spotlight-V100
 .Trashes
 ehthumbs.db

@@ -66,3 +66,7 @@ alias mv='mv -i'
 # untar
 alias untar='tar xvf'
 
+# some docker funtions
+alias dps='docker ps --format="table {{.ID}}\t{{.Image}}\t{{.Names}}"'
+alias dpsa='docker ps -a --format="table {{.ID}}\t{{.Image}}\t{{.Names}}"'
+

@@ -2,6 +2,7 @@
 	name = Matthew Tonkin - Dunn
 [core]
 	excludesfile = ~/.gitignore
+	editor = vim
 [push]
 	default = simple
 [alias]
