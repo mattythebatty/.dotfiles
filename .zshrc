@@ -108,3 +108,7 @@ autoload -Uz compinit && compinit -i
 alias phpmd='docker run --rm -it -v $(pwd):/workspace denisura/phpmd'
 alias phpcs='docker run --rm -it -v $(pwd):/src codacy/codacy-codesniffer'
 
+# some docker funtions
+alias dps='docker ps --format="table {{.ID}}\t{{.Image}}\t{{.Names}}"'
+alias dpsa='docker ps -a --format="table {{.ID}}\t{{.Image}}\t{{.Names}}"'
+
