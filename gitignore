@@ -5,6 +5,7 @@
 .vscode
 
 .phpunit-watcher.yml
+.phpunit.xml
 
 .phpstorm.meta.php
 

@@ -114,3 +114,16 @@ alias phpcs='docker run --rm -it -v $(pwd):/src codacy/codacy-codesniffer'
 alias dps='docker ps --format="table {{.ID}}\t{{.Image}}\t{{.Names}}"'
 alias dpsa='docker ps -a --format="table {{.ID}}\t{{.Image}}\t{{.Names}}"'
 
+
+# tabtab source for serverless package
+# uninstall by removing these lines or running `tabtab uninstall serverless`
+[[ -f /home/user/PhpstormProjects/fas-deployment-definitions/node_modules/tabtab/.completions/serverless.zsh ]] && . /home/user/PhpstormProjects/fas-deployment-definitions/node_modules/tabtab/.completions/serverless.zsh
+# tabtab source for sls package
+# uninstall by removing these lines or running `tabtab uninstall sls`
+[[ -f /home/user/PhpstormProjects/fas-deployment-definitions/node_modules/tabtab/.completions/sls.zsh ]] && . /home/user/PhpstormProjects/fas-deployment-definitions/node_modules/tabtab/.completions/sls.zsh
+# tabtab source for slss package
+# uninstall by removing these lines or running `tabtab uninstall slss`
+[[ -f /home/user/PhpstormProjects/fas-deployment-definitions/node_modules/tabtab/.completions/slss.zsh ]] && . /home/user/PhpstormProjects/fas-deployment-definitions/node_modules/tabtab/.completions/slss.zsh
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
