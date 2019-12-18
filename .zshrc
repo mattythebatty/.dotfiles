@@ -114,6 +114,10 @@ alias phpcs='docker run --rm -it -v $(pwd):/src codacy/codacy-codesniffer'
 alias dps='docker ps --format="table {{.ID}}\t{{.Image}}\t{{.Names}}"'
 alias dpsa='docker ps -a --format="table {{.ID}}\t{{.Image}}\t{{.Names}}"'
 
+# source the .extra (environment file)
+if [[ -r ".extra" ]] && [[ -f ".extra" ]]; then
+	source ".extra"
+fi
 
 # tabtab source for serverless package
 # uninstall by removing these lines or running `tabtab uninstall serverless`
